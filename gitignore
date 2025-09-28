@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Logs and system files
+*.log
+.DS_Store
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# PyCharm / VSCode project settings
+.idea/
+.vscode/
+
+# Model and dataset files (optional - uncomment if you don't want to push)
+# *.pkl
+# *.csv
