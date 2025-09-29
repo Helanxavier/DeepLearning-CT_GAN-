@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import pickle
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sdv.single_table import CTGANSynthesizer
 
 # ---------------------
@@ -28,7 +26,6 @@ num_samples = st.sidebar.slider(
 )
 
 show_preview = st.sidebar.checkbox("Show synthetic preview", value=True)
-show_comparison = st.sidebar.checkbox("Show comparison plots", value=True)
 generate_button = st.sidebar.button("Generate Synthetic Data")
 
 # ---------------------
@@ -86,41 +83,6 @@ if generate_button and ctgan is not None:
                 step=5,
             )
             st.dataframe(synthetic_data.head(preview_rows))
-
-        # Compare distributions (only if real dataset uploaded)
-        if show_comparison and real_data is not None:
-            st.subheader("📈 Real vs Synthetic Comparison")
-
-            fig, axes = plt.subplots(2, 2, figsize=(12, 8))
-
-            numeric_cols_real = real_data.select_dtypes(include=["int64", "float64"]).columns
-            numeric_cols_synth = synthetic_data.select_dtypes(include=["int64", "float64"]).columns
-            numeric_cols = list(set(numeric_cols_real).intersection(numeric_cols_synth))[:2]
-
-            cat_cols_real = real_data.select_dtypes(include=["object"]).columns
-            cat_cols_synth = synthetic_data.select_dtypes(include=["object"]).columns
-            cat_cols = list(set(cat_cols_real).intersection(cat_cols_synth))[:2]
-
-            # Numeric comparisons
-            for i, col in enumerate(numeric_cols):
-                sns.kdeplot(real_data[col], label="Real", ax=axes[i, 0], color="blue", fill=True)
-                sns.kdeplot(synthetic_data[col], label="Synthetic", ax=axes[i, 0], color="orange", fill=True)
-                axes[i, 0].set_title(f"Distribution of {col}")
-                axes[i, 0].legend()
-
-            # Categorical comparisons
-            for i, col in enumerate(cat_cols):
-                real_data[col].value_counts(normalize=True).sort_index().plot(
-                    kind="bar", ax=axes[i, 1], alpha=0.7, color="blue", label="Real"
-                )
-                synthetic_data[col].value_counts(normalize=True).sort_index().plot(
-                    kind="bar", ax=axes[i, 1], alpha=0.7, color="orange", label="Synthetic"
-                )
-                axes[i, 1].set_title(f"Category Distribution of {col}")
-                axes[i, 1].legend()
-
-            plt.tight_layout()
-            st.pyplot(fig)
 
         # Download button
         st.subheader("📥 Download Synthetic Data")
