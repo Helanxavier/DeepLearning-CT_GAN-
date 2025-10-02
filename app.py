@@ -8,7 +8,7 @@ from sdv.single_table import CTGANSynthesizer
 # ---------------------
 st.set_page_config(page_title="CTGAN Synthetic Data Generator", layout="wide")
 
-st.title("🤖 CTGAN Synthetic Data Generator")
+st.title("🤖Synthetic Data Generator")
 st.markdown("""
 Generate synthetic tabular data with CTGAN and compare it to real data.
 Upload your model (.pkl) and/or real dataset (.csv).
@@ -93,3 +93,4 @@ if generate_button and ctgan is not None:
             file_name="synthetic_data.csv",
             mime="text/csv",
         )
+
